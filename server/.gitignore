@@ -1,0 +1,47 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables
+.env
+.env.*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor-specific
+.vscode/
+.idea/
+
+# Build output
+dist/
+build/
+
+# Coverage reports
+coverage/
+
+# PM2 logs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional lockfiles (if you're only using one, ignore the other)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Optional: if using TypeScript
+*.tsbuildinfo
+
+# Optional: uploads or temp files
+uploads/
+tmp/
+temp/
