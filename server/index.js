@@ -32,38 +32,93 @@ app.post("/user", (req, res) => {
   res.send({ msg: "User created", balance: users[username] });
 });
 
-// POST /trade
+/**
+ * POST /trade
+ * -----------------------------
+ * Handles buy or sell trade requests for a user.
+ *
+ * Request body:
+ * {
+ *   username: string,      // The user's unique identifier
+ *   symbol: string,        // The asset symbol (e.g., FAKEBTC)
+ *   side: "BUY" | "SELL",  // Trade type
+ *   amountUSD: number      // USD value to trade
+ * }
+ *
+ * Workflow:
+ * 1️⃣ Validate that the user exists.
+ * 2️⃣ Validate that the asset symbol is correct.
+ * 3️⃣ Attempt the trade via `trade()` helper:
+ *    - Check for sufficient funds or holdings
+ *    - Update user balances if successful
+ * 4️⃣ If trade succeeds, update the user's PnL (profit and loss).
+ * 5️⃣ Return the result with updated user state and price info.
+ *
+ * Response:
+ * {
+ *   success: boolean,
+ *   message: string,       // Success/failure reason
+ *   user: object,          // Updated user portfolio
+ *   price: number          // Asset price at trade time
+ * }
+ *
+ * Example:
+ * POST /trade { username: "rohit", symbol: "FAKEBTC", side: "BUY", amountUSD: 5000 }
+ *
+ * Notes:
+ * - Logs key trade info for server-side debugging.
+ * - Returns clear error messages for invalid users, symbols, or insufficient balance/holdings.
+ */
 app.post("/trade", (req, res) => {
   const { username, symbol, side, amountUSD } = req.body;
 
-  // check for user availibility
+  // Check for user availability
   if (!users[username]) {
     console.log(`⚠️ User '${username}' not found.`);
-    return res
-      .status(404)
-      .send({ error: "User not found, please check the username." });
-  } else {
-    console.log(
-      `👉 [POST] /trade | User: ${username} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`
-    );
+    return res.status(404).send({ error: "User not found, please check the username." });
   }
 
-  const prices = getCurrentPrices();
-  const currentPrice = prices[symbol];
-  console.log(`📊 Current Price of ${symbol}: $${currentPrice}`);
-
-  const success = trade(username, symbol, side, amountUSD, currentPrice);
-  const pnl = calculatePNL(username, prices);
-
   console.log(
-    `💹 Trade ${success ? "executed" : "failed"} | PNL: $${pnl.toFixed(2)}`
+    `👉 [POST] /trade | User: ${username} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`
   );
-  console.log(`📦 Updated Portfolio for ${username}:`, users[username]);
 
-  res.send({ success, username: users[username] });
+  const prices = getCurrentPrices();
+
+  // Validate symbol
+  if (!prices[symbol]) {
+    console.log(`⚠️ Invalid symbol '${symbol}'`);
+    return res.status(400).send({ error: `Invalid trading symbol '${symbol}'.` });
+  }
+
+  // Attempt trade
+  const result = trade(username, symbol, side, amountUSD, prices[symbol]);
+
+  if (result.success) {
+    calculatePNL(username, prices);
+  }
+
+  res.send({
+    ...result,
+    user: users[username],
+    price: prices[symbol],
+  });
 });
 
-// GET /leaderboard
+
+/**
+ * GET /leaderboard
+ *
+ * Purpose: Fetch the current trading leaderboard, sorted by PnL.
+ *
+ * Returns:
+ * - An array of users with their names and current PnL, sorted in descending order.
+ *
+ * Notes:
+ * - The leaderboard is recalculated before sending.
+ * - No authentication is applied — it shows all active users' PnL.
+ *
+ * Example: GET /leaderboard
+ */
 app.get("/leaderboard", (req, res) => {
   console.log(`📥 [GET] /leaderboard`);
   const board = getLeaderboard();
