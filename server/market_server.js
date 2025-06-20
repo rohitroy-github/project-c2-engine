@@ -70,9 +70,6 @@ app.post("/user", (req, res) => {
  *   price: number          // Asset price at trade time
  * }
  *
- * Example:
- * POST /trade { username: "rohit", symbol: "FAKEBTC", side: "BUY", amountUSD: 5000 }
- *
  * Notes:
  * - Logs key trade info for server-side debugging.
  * - Returns clear error messages for invalid users, symbols, or insufficient balance/holdings.
@@ -192,6 +189,8 @@ app.get("/status/:user", (req, res) => {
     usd: users[user].usd,
     holdings: users[user].holdings,
     pnl,
+    realizedPNL: users[user].realizedPNL,
+    unrealizedPNL: users[user].unrealizedPNL,
     prices,
   });
 });
@@ -208,6 +207,6 @@ setInterval(() => {
   const leaderboard = getLeaderboard();
   console.log(`🔄 Prices Updated:`, prices);
   io.emit("prices", { prices, leaderboard });
-}, 500);
+}, 100);
 
 server.listen(3000, () => console.log("🚀 Market server running on port 3000"));

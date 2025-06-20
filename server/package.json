@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "market": "nodemon index.js",
+    "market": "nodemon market_server.js",
     "dev2": "nodemon index2.js",
     "logger": "nodemon tradelog_server.js"
   },
