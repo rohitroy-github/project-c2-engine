@@ -1,11 +1,28 @@
-creating new user ✅ 
-    creating new user with already existing username - diaplay error message ✅
+testing @marketserver
 
-buy trade ✅
-sell trade ✅
-fetching leaderbord data ✅
-fetching positions of trader ✅
+    creating new user ✅ 
+        creating new user with already existing username - diaplay error message ✅
+
+    buy trade ✅
+        punched trade with insufficient funds ✅
+        punched trdae with wrong username ✅
+
+    sell trade ✅
+        punched trade with insufficient funds ✅
+        punched trade with wrong username ✅
+
+    fetching leaderbord data ✅
+        fetched data in single user conditions ✅ 
+        fetched data when no user is present ✅
+        fetched data under multiple user in present ✅
+        
+    fetching positions of trader ✅
+        
+
+testing @tradelogserver
 
 features to add
 
     positional trades with set entry points
+    stop-losses trades
+    a separate server for logging in the trades ✅

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const axios = require('axios');
 
 const { updatePrices, getCurrentPrices } = require("./priceEngine");
 const { users, createUser, trade, calculatePNL } = require("./users");
@@ -13,6 +14,13 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(cors());
 app.use(express.json());
+
+function logTradeToLoggerServer(tradeData) {
+  axios
+    .post("http://localhost:4000/log", tradeData)
+    .then(() => console.log("✅ Trade logged successfully."))
+    .catch((err) => console.error("Error in log server: ", err.message));
+}
 
 // POST /user
 app.post("/user", (req, res) => {
@@ -75,7 +83,9 @@ app.post("/trade", (req, res) => {
   // Check for user availability
   if (!users[username]) {
     console.log(`⚠️ User '${username}' not found.`);
-    return res.status(404).send({ error: "User not found, please check the username." });
+    return res
+      .status(404)
+      .send({ error: "User not found, please check the username." });
   }
 
   console.log(
@@ -87,7 +97,9 @@ app.post("/trade", (req, res) => {
   // Validate symbol
   if (!prices[symbol]) {
     console.log(`⚠️ Invalid symbol '${symbol}'`);
-    return res.status(400).send({ error: `Invalid trading symbol '${symbol}'.` });
+    return res
+      .status(400)
+      .send({ error: `Invalid trading symbol '${symbol}'.` });
   }
 
   // Attempt trade
@@ -95,6 +107,17 @@ app.post("/trade", (req, res) => {
 
   if (result.success) {
     calculatePNL(username, prices);
+
+    // logging in the trade
+
+    logTradeToLoggerServer({
+      username,
+      symbol,
+      side,
+      amountUSD,
+      price: prices[symbol],
+      timestamp: Date.now(),
+    });
   }
 
   res.send({
@@ -104,25 +127,28 @@ app.post("/trade", (req, res) => {
   });
 });
 
-
 /**
  * GET /leaderboard
  *
- * Purpose: Fetch the current trading leaderboard, sorted by PnL.
+ * Purpose: Fetch the current trading leaderboard, sorted by PnL (Profit and Loss).
  *
  * Returns:
- * - An array of users with their names and current PnL, sorted in descending order.
+ * - If users exist: An object containing a success message and an array of users,
+ *   where each user includes:
+ *     - name (string)
+ *     - pnl (number, current profit/loss)
+ *     - holdings (array of { symbol, quantity }, only non-zero holdings, quantity rounded to 4 decimal places)
+ *
+ * - If no users exist: An object with a message and an empty leaderboard array.
  *
  * Notes:
- * - The leaderboard is recalculated before sending.
+ * - The leaderboard is recalculated before sending based on the latest state.
  * - No authentication is applied — it shows all active users' PnL.
- *
- * Example: GET /leaderboard
  */
 app.get("/leaderboard", (req, res) => {
   console.log(`📥 [GET] /leaderboard`);
   const board = getLeaderboard();
-  console.log(`🏆 Leaderboard Sent:`, board);
+  console.log(`🏆 Leaderboard fetched:`, board.leaderboard);
   res.send(board);
 });
 
@@ -184,4 +210,4 @@ setInterval(() => {
   io.emit("prices", { prices, leaderboard });
 }, 500);
 
-server.listen(3000, () => console.log("🚀 Server running on port 3000"));
+server.listen(3000, () => console.log("🚀 Market server running on port 3000"));

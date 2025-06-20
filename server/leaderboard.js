@@ -1,7 +1,7 @@
 const { users } = require('./users');
 
 function getLeaderboard() {
-  return Object.entries(users)
+  const leaderboard = Object.entries(users)
     .map(([name, data]) => ({
       name,
       pnl: data.pnl,
@@ -13,21 +13,12 @@ function getLeaderboard() {
         }))
     }))
     .sort((a, b) => b.pnl - a.pnl);
+
+  if (leaderboard.length === 0) {
+    return { message: 'Leaderboard is empty.', leaderboard: [] };
+  }
+
+  return { message: 'Leaderboard fetched successfully.', leaderboard };
 }
 
 module.exports = { getLeaderboard };
-
-
-// ### PNL with just the name and PNL value
-// const { users } = require('./users');
-
-// function getLeaderboard() {
-//   return Object.entries(users)
-//     .map(([name, data]) => ({
-//       name,
-//       pnl: data.pnl,
-//     }))
-//     .sort((a, b) => b.pnl - a.pnl);
-// }
-
-// module.exports = { getLeaderboard };
