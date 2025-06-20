@@ -3,13 +3,21 @@ const app = express();
 
 app.use(express.json());
 
-const tradeLogs = [];  // You can replace this with a DB later
+const tradeLogs = [];
+let tradeCounter = 1;
 
 app.post('/log', (req, res) => {
   const trade = req.body;
-  tradeLogs.push(trade);
-  console.log('🎫 New trade logged: ', trade);
-  res.send({ success: true });
+
+  const tradeWithId = {
+    id: tradeCounter++, 
+    ...trade,
+  };
+
+  tradeLogs.push(tradeWithId);
+  console.log('🎫 New trade logged: ', tradeWithId);
+
+  res.send({ success: true, id: tradeWithId.id });
 });
 
 app.get('/logs', (req, res) => {
