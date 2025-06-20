@@ -2,6 +2,7 @@ const users = {};
 
 function createUser(name) {
   users[name] = {
+    username: name,
     usd: 10000,
     holdings: {},
     initialUsd: 10000,

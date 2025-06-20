@@ -16,39 +16,51 @@ app.use(express.json());
 
 // POST /user
 app.post("/user", (req, res) => {
-  const { name } = req.body;
+  const { username } = req.body;
   console.log(`👉 [POST] /user | Payload:`, req.body);
 
-  if (!users[name]) {
-    createUser(name);
-    console.log(`✅ User '${name}' created.`);
+  if (!users[username]) {
+    createUser(username);
+    console.log(`✅ User '${username}' created.`);
   } else {
-    console.log(`⚠️ User '${name}' already exists.`);
+    console.log(`⚠️ User '${username}' already exists.`);
+    return res
+      .status(404)
+      .send({ error: "User already exists, please use a different username." });
   }
 
-  res.send({ msg: "User created", balance: users[name] });
+  res.send({ msg: "User created", balance: users[username] });
 });
 
 // POST /trade
 app.post("/trade", (req, res) => {
-  const { user, symbol, side, amountUSD } = req.body;
-  console.log(
-    `👉 [POST] /trade | User: ${user} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`
-  );
+  const { username, symbol, side, amountUSD } = req.body;
+
+  // check for user availibility
+  if (!users[username]) {
+    console.log(`⚠️ User '${username}' not found.`);
+    return res
+      .status(404)
+      .send({ error: "User not found, please check the username." });
+  } else {
+    console.log(
+      `👉 [POST] /trade | User: ${username} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`
+    );
+  }
 
   const prices = getCurrentPrices();
   const currentPrice = prices[symbol];
   console.log(`📊 Current Price of ${symbol}: $${currentPrice}`);
 
-  const success = trade(user, symbol, side, amountUSD, currentPrice);
-  const pnl = calculatePNL(user, prices);
+  const success = trade(username, symbol, side, amountUSD, currentPrice);
+  const pnl = calculatePNL(username, prices);
 
   console.log(
-    `💹 Trade ${success ? "executed" : "failed"} | PnL: $${pnl.toFixed(2)}`
+    `💹 Trade ${success ? "executed" : "failed"} | PNL: $${pnl.toFixed(2)}`
   );
-  console.log(`📦 Updated Portfolio for ${user}:`, users[user]);
+  console.log(`📦 Updated Portfolio for ${username}:`, users[username]);
 
-  res.send({ success, user: users[user] });
+  res.send({ success, username: users[username] });
 });
 
 // GET /leaderboard
@@ -81,19 +93,17 @@ app.get("/status/:user", (req, res) => {
 
   if (!users[user]) {
     // console.log(`[STATUS][${new Date().toISOString()}] User not found: ${user}`);
-    console.log(
-      `⚠️ [STATUS] User not found: ${user}`
-    );
-    return res.status(404).send({ error: "User not found, please check the username." });
+    console.log(`⚠️ [STATUS] User not found: ${user}`);
+    return res
+      .status(404)
+      .send({ error: "User not found, please check the username." });
   }
 
   const prices = getCurrentPrices();
   const pnl = calculatePNL(user, prices);
 
   console.log(
-    `💹 [STATUS] User: ${user} | USD: ${
-      users[user].usd
-    } | PnL: ${pnl}`
+    `💹 [STATUS] User: ${user} | USD: ${users[user].usd} | PnL: ${pnl}`
   );
 
   res.send({

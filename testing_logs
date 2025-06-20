@@ -1,5 +1,11 @@
 creating new user ✅ 
+    creating new user with already existing username - diaplay error message ✅
+
 buy trade ✅
 sell trade ✅
 fetching leaderbord data ✅
+fetching positions of trader ✅
 
+features to add
+
+    positional trades with set entry points
