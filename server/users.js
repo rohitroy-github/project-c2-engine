@@ -4,7 +4,9 @@ function createUser(name) {
   users[name] = {
     username: name,
     usd: 10000,
-    holdings: {},
+    holdings: {
+      
+    },
     initialUsd: 10000,
     pnl: 0,
     realizedPNL: 0,
@@ -35,7 +37,7 @@ function trade(user, symbol, side, amountUSD, price) {
     users[user].usd += amountUSD;
     users[user].holdings[symbol] -= quantity;
 
-    users[user].realizedPNL += (users[user].usd - users[user].initialUsd); 
+    users[user].realizedPNL += users[user].usd - users[user].initialUsd;
   } else {
     return { success: false, message: "Invalid trade side" };
   }
@@ -60,13 +62,20 @@ function trade(user, symbol, side, amountUSD, price) {
 function calculatePNL(user, prices) {
   let portfolioValue = users[user].usd;
 
-  for (const symbol in users[user].holdings) {
-    portfolioValue += users[user].holdings[symbol] * prices[symbol];
-  }
-
-  users[user].unrealizedPNL = parseFloat(
-    (portfolioValue - users[user].usd).toFixed(2)
+  // Check if user has any holdings
+  const hasHoldings = Object.keys(users[user].holdings).some(
+    (symbol) => users[user].holdings[symbol] > 0
   );
+
+  if (hasHoldings) {
+    for (const symbol in users[user].holdings) {
+      portfolioValue += users[user].holdings[symbol] * prices[symbol];
+    }
+
+    users[user].unrealizedPNL = parseFloat(
+      (portfolioValue - users[user].initialUsd).toFixed(2)
+    );
+  }
 
   users[user].pnl = parseFloat(
     (users[user].realizedPNL + users[user].unrealizedPNL).toFixed(2)
