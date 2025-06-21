@@ -17,6 +17,11 @@ testing @marketserver
         fetched data under multiple user in present ✅
         
     fetching positions of trader ✅
+        fetched total pnl ✅
+        fetched realized pnl ✅
+        fetched unrealized pnl ✅
+        fetched cost-basis for holdings on first trade(BUY) ✅
+        fetched updated cost-basis for further trades ✅
         
 
 testing @tradelogserver

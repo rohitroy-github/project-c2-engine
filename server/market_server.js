@@ -191,7 +191,7 @@ app.get("/status/:user", (req, res) => {
     pnl,
     realizedPNL: users[user].realizedPNL,
     unrealizedPNL: users[user].unrealizedPNL,
-    prices,
+    // prices,
   });
 });
 

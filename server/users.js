@@ -5,7 +5,10 @@ function createUser(name) {
     username: name,
     usd: 10000,
     holdings: {
-      
+      GMCOIN: {
+        quantity: 0,
+        costBasis: 0,
+      },
     },
     initialUsd: 10000,
     pnl: 0,
@@ -21,64 +24,109 @@ function trade(user, symbol, side, amountUSD, price) {
     if (users[user].usd < amountUSD) {
       return {
         success: false,
-        message: "Insufficient USD balance for this buy order",
+        message: "Insufficient funds for this buy order.",
       };
     }
+
+    const holding = users[user].holdings[symbol] || {
+      quantity: 0,
+      costBasis: 0,
+    };
+    const totalCost = holding.quantity * holding.costBasis + amountUSD;
+    const newQuantity = holding.quantity + quantity;
+
+    // New average cost basis
+    const newCostBasis = totalCost / newQuantity;
+
     users[user].usd -= amountUSD;
-    users[user].holdings[symbol] =
-      (users[user].holdings[symbol] || 0) + quantity;
+
+    users[user].holdings[symbol] = {
+      quantity: newQuantity,
+      costBasis: newCostBasis,
+    };
+    return { success: true, message: "Buy executed successfully" };
   } else if (side === "SELL") {
-    if ((users[user].holdings[symbol] || 0) < quantity) {
+    const holding = users[user].holdings[symbol];
+    if (!holding || holding.quantity < quantity) {
       return {
         success: false,
         message: `Insufficient ${symbol} holdings for this sell order`,
       };
     }
+
+    // Realized Profit = (sell price - cost basis) * quantity
+    const cost = quantity * holding.costBasis;
+    const revenue = amountUSD;
+    const pnl = revenue - cost;
+
+    // Adjust holdings
+    holding.quantity -= quantity;
+
+    if (holding.quantity <= 0) {
+      delete users[user].holdings[symbol];
+    }
+
     users[user].usd += amountUSD;
-    users[user].holdings[symbol] -= quantity;
+    users[user].realizedPNL += parseFloat(pnl.toFixed(2));
 
-    users[user].realizedPNL += users[user].usd - users[user].initialUsd;
+    return {
+      success: true,
+      message: "Sell executed successfully",
+    };
   } else {
-    return { success: false, message: "Invalid trade side" };
+    return {
+      success: false,
+      message: "Invalid trade side",
+    };
   }
-
-  return { success: true, message: "Trade executed successfully" };
 }
 
 // function trade(user, symbol, side, amountUSD, price) {
 //   const quantity = amountUSD / price;
-//   if (side === 'BUY') {
-//     if (users[user].usd < amountUSD) return false;
+
+//   if (side === "BUY") {
+//     if (users[user].usd < amountUSD) {
+//       return {
+//         success: false,
+//         message: "Insufficient USD balance for this buy order",
+//       };
+//     }
 //     users[user].usd -= amountUSD;
-//     users[user].holdings[symbol] = (users[user].holdings[symbol] || 0) + quantity;
-//   } else {
-//     if ((users[user].holdings[symbol] || 0) < quantity) return false;
+//     users[user].holdings[symbol] =
+//       (users[user].holdings[symbol] || 0) + quantity;
+//   } else if (side === "SELL") {
+//     if ((users[user].holdings[symbol] || 0) < quantity) {
+//       return {
+//         success: false,
+//         message: `Insufficient ${symbol} holdings for this sell order`,
+//       };
+//     }
 //     users[user].usd += amountUSD;
 //     users[user].holdings[symbol] -= quantity;
+
+//     users[user].realizedPNL += users[user].usd - users[user].initialUsd;
+//   } else {
+//     return { success: false, message: "Invalid trade side" };
 //   }
-//   return true;
+
+//   return { success: true, message: "Trade executed successfully" };
 // }
 
 function calculatePNL(user, prices) {
-  let portfolioValue = users[user].usd;
+  let unrealizedPNL = 0;
 
-  // Check if user has any holdings
-  const hasHoldings = Object.keys(users[user].holdings).some(
-    (symbol) => users[user].holdings[symbol] > 0
-  );
-
-  if (hasHoldings) {
-    for (const symbol in users[user].holdings) {
-      portfolioValue += users[user].holdings[symbol] * prices[symbol];
-    }
-
-    users[user].unrealizedPNL = parseFloat(
-      (portfolioValue - users[user].initialUsd).toFixed(2)
-    );
+  // Loop through holdings
+  for (const symbol in users[user].holdings) {
+    const holding = users[user].holdings[symbol];
+    unrealizedPNL += holding.quantity * (prices[symbol] - holding.costBasis);
   }
 
+  // Save the calculated unrealized PNL
+  users[user].unrealizedPNL = parseFloat(unrealizedPNL.toFixed(2));
+
+  // Final total PNL = Realized + Unrealized
   users[user].pnl = parseFloat(
-    (users[user].realizedPNL + users[user].unrealizedPNL).toFixed(2)
+    (users[user].realizedPNL + unrealizedPNL).toFixed(2)
   );
 
   return users[user].pnl;
