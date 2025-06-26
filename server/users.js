@@ -81,37 +81,6 @@ function trade(user, symbol, side, amountUSD, price) {
   }
 }
 
-// function trade(user, symbol, side, amountUSD, price) {
-//   const quantity = amountUSD / price;
-
-//   if (side === "BUY") {
-//     if (users[user].usd < amountUSD) {
-//       return {
-//         success: false,
-//         message: "Insufficient USD balance for this buy order",
-//       };
-//     }
-//     users[user].usd -= amountUSD;
-//     users[user].holdings[symbol] =
-//       (users[user].holdings[symbol] || 0) + quantity;
-//   } else if (side === "SELL") {
-//     if ((users[user].holdings[symbol] || 0) < quantity) {
-//       return {
-//         success: false,
-//         message: `Insufficient ${symbol} holdings for this sell order`,
-//       };
-//     }
-//     users[user].usd += amountUSD;
-//     users[user].holdings[symbol] -= quantity;
-
-//     users[user].realizedPNL += users[user].usd - users[user].initialUsd;
-//   } else {
-//     return { success: false, message: "Invalid trade side" };
-//   }
-
-//   return { success: true, message: "Trade executed successfully" };
-// }
-
 function calculatePNL(user, prices) {
   let unrealizedPNL = 0;
 

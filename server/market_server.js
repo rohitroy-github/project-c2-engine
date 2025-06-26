@@ -207,6 +207,6 @@ setInterval(() => {
   const leaderboard = getLeaderboard();
   console.log(`🔄 Prices Updated:`, prices);
   io.emit("prices", { prices, leaderboard });
-}, 100);
+}, 500);
 
 server.listen(3000, () => console.log("🚀 Market server running on port 3000"));
