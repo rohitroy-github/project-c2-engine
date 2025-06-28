@@ -120,7 +120,7 @@ app.post("/trade", (req, res) => {
   res.send({
     ...result,
     user: users[username],
-    price: prices[symbol],
+    // price: prices[symbol],
   });
 });
 

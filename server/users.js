@@ -1,16 +1,21 @@
+const assets = require("./assets");
+
 const users = {};
 
 function createUser(name) {
+  const initialHoldings = {};
+  assets.forEach((asset) => {
+    initialHoldings[asset.symbol] = {
+      quantity: 0,
+      costBasis: 0,
+    };
+  });
+
   users[name] = {
     username: name,
-    usd: 10000,
-    holdings: {
-      GMCOIN: {
-        quantity: 0,
-        costBasis: 0,
-      },
-    },
     initialUsd: 10000,
+    usd: 10000,
+    holdings: initialHoldings,
     pnl: 0,
     realizedPNL: 0,
     unrealizedPNL: 0,
