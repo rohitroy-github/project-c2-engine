@@ -1,51 +1,84 @@
-# Node modules
+# ========================================
+# Node Modules
+# ========================================
 node_modules/
 
+# ========================================
 # Logs
+# ========================================
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# dotenv environment variables
+# ========================================
+# dotenv Environment Variables
+# ========================================
 .env
 .env.*
 
-# OS-specific
+# ========================================
+# OS-specific Files
+# ========================================
 .DS_Store
 Thumbs.db
 
-# Editor-specific
-.vscode/
+# ========================================
+# Editor-specific Files
+# ========================================
+.vscode/*
+!.vscode/extensions.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Build output
+# ========================================
+# Build Output
+# ========================================
 dist/
+dist-ssr/
 build/
 
-# Coverage reports
+# ========================================
+# Coverage Reports
+# ========================================
 coverage/
 
-# PM2 logs
+# ========================================
+# PM2 Logs / PIDs
+# ========================================
 pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Optional lockfiles (if you're only using one, ignore the other)
+# ========================================
+# Lockfiles
+# (Keep only one of these in actual use)
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Optional: if using TypeScript
+# ========================================
+# TypeScript Build Info
+# ========================================
 *.tsbuildinfo
 
-# Optional: uploads or temp files
+# ========================================
+# Uploads / Temp Files
+# ========================================
 uploads/
 tmp/
 temp/
 
-# Rohit's files
+# ========================================
+# Rohit's Files
+# ========================================
 readMeRohit
 /readMeRohit
