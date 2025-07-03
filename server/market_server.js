@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const axios = require('axios');
+const axios = require("axios");
 
 const { updatePrices, getCurrentPrices } = require("./priceEngine");
 const { users, createUser, trade, calculatePNL } = require("./users");
@@ -207,6 +207,7 @@ setInterval(() => {
   const leaderboard = getLeaderboard();
   console.log(`🔄 Prices Updated:`, prices);
   io.emit("prices", { prices, leaderboard });
-}, 500);
+}, 3000
+);
 
 server.listen(3000, () => console.log("🚀 Market server running on port 3000"));

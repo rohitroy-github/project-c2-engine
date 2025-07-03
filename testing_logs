@@ -26,8 +26,17 @@ testing @marketserver
 
 testing @tradelogserver
 
-features to add
+testing @clientserver
 
-    positional trades with set entry points
-    stop-losses trades
-    a separate server for logging in the trades ✅
+    creating new user ✅
+        creating new user with a new name ✅
+        creating a user with existing name ✅
+
+    buy trade ✅
+        punching buy trade ✅
+        punching buy trade with over limit of funds failing ✅
+
+    sell trade ✅
+        punching sell trade ✅
+        punching sell trade with insufficient funds failing ✅
+
