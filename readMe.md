@@ -1,133 +1,78 @@
-# 💸 Simulated Crypto Trading Game – "Stock Clash"
+# Project C2-Engine
 
-A real-time, gamified **crypto trading simulation platform** where players can:
-
-- Trade mock crypto assets like ETH_SUB1, ETH_SUB2, and ETH_SUB3
-- Compete in short-burst market simulations
-- View live price charts and personal portfolios
-- Climb up a leaderboard based on profit/loss
-- Experience high-speed simulated markets with real-time price changes
+A web-based application that simulates real-time cryptocurrency trading. Users can register, view live asset prices, perform trades, track performance, and compete on a live leaderboard — all in a fast, dynamic market environment.
 
 ---
 
-## 🚀 Project Overview
+## Overview
 
-This project is a **web-based crypto trading simulator**, where each user starts with $10,000 fake USD. Users can:
+Each user starts with a virtual balance of **$10,000 USD**. The platform simulates asset price volatility and allows users to:
 
-- **Buy/Sell** assets in a simulated market
-- Track **realized** and **unrealized PnL**
-- Compete on a **live leaderboard**
-- View **live-updating price charts**
-- Watch prices fluctuate in real-time (via pseudo-volatility)
-
----
-
-## 🧩 Key Features
-
-### 🧑 User System
-- Create user with `username` (name, age, wallet address optional)
-- Store balance, holdings, PnL (profit and loss)
-
-### 💹 Market Simulator
-- Prices of assets update every 500ms
-- Randomized volatility simulation per asset
-- Assets tracked: `ETH_SUB1`, `ETH_SUB2`, `ETH_SUB3`
-
-### 🔄 Trading System
-- Buy/sell assets with USD
-- Dynamic quantity based on current price
-- Cost basis maintained per asset
-- PnL calculated with:
-  - Realized PnL (after selling)
-  - Unrealized PnL (current value - cost basis)
-
-### 📊 Leaderboard
-- Sorted by total PnL (realized + unrealized)
-- Displays top performers and their holdings
-
-### 📈 Live Charting
-- Each asset shows a real-time line chart of price movements
-- Built using socket-powered updates + charting library
+- Buy/sell mock crypto assets
+- Monitor price changes in real-time
+- Track both realized and unrealized profits and losses
+- View a ranked leaderboard
+- Analyze price trends using live charts
 
 ---
 
-## 🧱 Tech Stack
+## Features
 
-| Layer       | Tech                                     |
-|------------|-------------------------------------------|
-| Frontend    | React, Tailwind CSS, Recharts, Axios      |
-| Backend     | Express.js, Socket.io                     |
-| State Mgmt  | React Hooks, Custom Props                 |
-| Charting    | `recharts` (line charts)                  |
-| Logging     | Dedicated Express server for trade logs   |
-| Mock Assets | `assets.js` file with predefined assets   |
+### User Management
+- Register using a unique `username`
+- Optional fields: `name`, `wallet address`, `age`
+- Each new user is initialized with $10,000
 
----
+### Market Simulation
+- Asset prices update every **500ms**
+- Volatility introduced using randomized logic
+- Supported mock assets:
+  - `ETH_SUB1`
+  - `ETH_SUB2`
+  - `ETH_SUB3`
 
-## 📂 Folder Structure
-# 💸 Simulated Crypto Trading Game – "Stock Clash"
+### Trading System
+- Buy and sell assets using virtual USD
+- Dynamic trade quantity based on live price
+- Holdings maintain `quantity` and `cost basis`
+- Profit and Loss (PnL):
+  - **Realized PnL**: Based on completed trades
+  - **Unrealized PnL**: Based on current asset value
 
-A real-time, gamified **crypto trading simulation platform** where players can:
+### Leaderboard
+- Displays all users sorted by total PnL
+- Shows breakdown of:
+  - Username
+  - Total PnL
+  - Realized and Unrealized PnL
 
-- Trade mock crypto assets like ETH_SUB1, ETH_SUB2, and ETH_SUB3
-- Compete in short-burst market simulations
-- View live price charts and personal portfolios
-- Climb up a leaderboard based on profit/loss
-- Experience high-speed simulated markets with real-time price changes
-
----
-
-## 🚀 Project Overview
-
-This project is a **web-based crypto trading simulator**, where each user starts with $10,000 fake USD. Users can:
-
-- **Buy/Sell** assets in a simulated market
-- Track **realized** and **unrealized PnL**
-- Compete on a **live leaderboard**
-- View **live-updating price charts**
-- Watch prices fluctuate in real-time (via pseudo-volatility)
-
----
-
-## 🧩 Key Features
-
-### 🧑 User System
-- Create user with `username` (name, age, wallet address optional)
-- Store balance, holdings, PnL (profit and loss)
-
-### 💹 Market Simulator
-- Prices of assets update every 500ms
-- Randomized volatility simulation per asset
-- Assets tracked: `ETH_SUB1`, `ETH_SUB2`, `ETH_SUB3`
-
-### 🔄 Trading System
-- Buy/sell assets with USD
-- Dynamic quantity based on current price
-- Cost basis maintained per asset
-- PnL calculated with:
-  - Realized PnL (after selling)
-  - Unrealized PnL (current value - cost basis)
-
-### 📊 Leaderboard
-- Sorted by total PnL (realized + unrealized)
-- Displays top performers and their holdings
-
-### 📈 Live Charting
-- Each asset shows a real-time line chart of price movements
-- Built using socket-powered updates + charting library
+### Live Price Charting
+- Charts update in real-time via WebSocket
+- Built using `recharts` and live market data
+- One chart per asset showing price history
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
-| Layer       | Tech                                     |
-|------------|-------------------------------------------|
-| Frontend    | React, Tailwind CSS, Recharts, Axios      |
-| Backend     | Express.js, Socket.io                     |
-| State Mgmt  | React Hooks, Custom Props                 |
-| Charting    | `recharts` (line charts)                  |
-| Logging     | Dedicated Express server for trade logs   |
-| Mock Assets | `assets.js` file with predefined assets   |
+| Layer        | Technology                    |
+|--------------|-------------------------------|
+| Frontend     | React, Tailwind CSS, Axios    |
+| Backend      | Express.js, Socket.io         |
+| Charting     | Recharts (for price history)  |
+| Logging      | Separate Express log server   |
+| Mock Assets  | Defined in `assets.js`        |
+| State Mgmt   | React Hooks                   |
 
 ---
 
+## Local Installation
+
+- To run the **market server**, run:
+```
+npm run market
+```
+- To run the **frontend application**, run:
+```
+npm run app
+```
