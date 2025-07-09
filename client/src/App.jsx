@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Navbar from "./layout/Navbar";
 import RegisterPage from "./pages/RegisterPage";
 import TradePage from "./pages/TradePage";
@@ -13,8 +18,14 @@ function App() {
       <Navbar user={userInfo} />
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />
-        <Route path="/register" element={<RegisterPage setUserInfo={setUserInfo} />} />
-        <Route path="/trade" element={<TradePage userInfo={userInfo} />} />
+        <Route
+          path="/register"
+          element={<RegisterPage setUserInfo={setUserInfo} />}
+        />
+        <Route
+          path="/trade"
+          element={<TradePage currentUser={userInfo?.username} />}
+        />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
       </Routes>
     </Router>

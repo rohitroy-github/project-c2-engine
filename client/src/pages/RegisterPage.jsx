@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export default function RegisterPage({ setUserInfo }) {
   const navigate = useNavigate();
 
-
   const [form, setForm] = useState({
     name: "",
     wallet: "",
@@ -78,7 +77,7 @@ export default function RegisterPage({ setUserInfo }) {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="e.g. John Doe"
             />
           </div>
@@ -92,7 +91,7 @@ export default function RegisterPage({ setUserInfo }) {
               name="wallet"
               value={form.wallet}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="0x..."
             />
           </div>
@@ -107,7 +106,7 @@ export default function RegisterPage({ setUserInfo }) {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Unique username"
             />
           </div>
@@ -119,14 +118,14 @@ export default function RegisterPage({ setUserInfo }) {
               name="age"
               value={form.age}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-purple-400"
               placeholder="e.g. 22"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition"
+            className="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-md transition"
           >
             Register
           </button>

@@ -1,34 +1,43 @@
-import { useEffect, useState } from 'react';
-import { fetchLeaderboard } from '../api';
+import { useEffect, useState } from "react";
+import { fetchLeaderboard } from "../api";
 
 export default function Leaderboard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchLeaderboard().then((res) => setData(res.data.leaderboard));
+    fetchLeaderboard().then((res) => setData(res.data.leaderboard || []));
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">🏆 Leaderboard</h2>
-      <table className="w-full border">
-        <thead>
+    <div className="overflow-x-auto">
+      <table className="min-w-full table-auto border border-gray-300 bg-white rounded-md shadow-sm">
+        <thead className="bg-indigo-50 text-gray-700 uppercase text-sm font-semibold">
           <tr>
-            <th className="border p-2">User</th>
-            <th className="border p-2">Total PnL</th>
-            <th className="border p-2">Unrealized</th>
-            <th className="border p-2">Realized</th>
+            <th className="p-3 border">#</th>
+            <th className="p-3 border text-left">Username</th>
+            <th className="p-3 border text-right">Total PnL</th>
+            <th className="p-3 border text-right">Unrealized</th>
+            <th className="p-3 border text-right">Realized</th>
           </tr>
         </thead>
-        <tbody>
-          {data.map((user) => (
-            <tr key={user.name}>
-              <td className="border p-2">{user.name}</td>
-              <td className="border p-2">${user.pnl}</td>
-              <td className="border p-2">${user.unrealizedPNL}</td>
-              <td className="border p-2">${user.realizedPNL}</td>
+        <tbody className="text-gray-800">
+          {data.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="p-4 text-center text-gray-500">
+                No leaderboard data available.
+              </td>
             </tr>
-          ))}
+          ) : (
+            data.map((user, idx) => (
+              <tr key={user.name} className="hover:bg-gray-50">
+                <td className="p-3 border text-center font-medium">{idx + 1}</td>
+                <td className="p-3 border">{user.name}</td>
+                <td className="p-3 border text-right">${user.pnl.toFixed(2)}</td>
+                <td className="p-3 border text-right">${user.unrealizedPNL?.toFixed(2) || 0}</td>
+                <td className="p-3 border text-right">${user.realizedPNL?.toFixed(2) || 0}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
