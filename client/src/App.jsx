@@ -3,21 +3,23 @@ import Navbar from "./layout/Navbar";
 import RegisterPage from "./pages/RegisterPage";
 import TradePage from "./pages/TradePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
-import { useState } from "react";
+import { AuthProvider } from "./context/authContext";
 
 function App() {
-  const [userInfo, setUserInfo] = useState(null);
-
   return (
+
     <Router>
-      <Navbar user={userInfo} />
-      <Routes>
-        <Route path="/" element={<Navigate to="/register" />} />
-        <Route path="/register" element={<RegisterPage setUserInfo={setUserInfo} />} />
-        <Route path="/trade" element={<TradePage userInfo={userInfo} />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-      </Routes>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Navigate to="/register" />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/trade" element={<TradePage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+        </Routes>
+      </AuthProvider>
     </Router>
+
   );
 }
 
