@@ -6,10 +6,17 @@ export default function Navbar() {
   const { userInfo } = useAuthContext();
   return (
     <nav className="bg-white shadow-md p-4 flex items-center justify-between font-montserrat">
+
       <div className="flex gap-6 text-gray-800 font-semibold text-sm md:text-base">
-        <Link to="/register" className="hover:text-indigo-600 transition">Register</Link>
-        <Link to="/trade" className="hover:text-indigo-600 transition">Trade</Link>
-        <Link to="/leaderboard" className="hover:text-indigo-600 transition">Leaderboard</Link>
+        <Link to="/register" className="hover:text-purple-600 transition">
+          Register
+        </Link>
+        <Link to="/trade" className="hover:text-purple-600 transition">
+          Trade
+        </Link>
+        <Link to="/leaderboard" className="hover:text-purple-600 transition">
+          Leaderboard
+        </Link>
       </div>
 
       {userInfo?.username && (
