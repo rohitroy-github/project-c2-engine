@@ -1,23 +1,42 @@
 // src/context/MyContext.js
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
+import { fetchStatus } from "../api";
 
-// Create the context
 const AuthContext = createContext();
 
-// Create the provider component
 export const AuthProvider = ({ children }) => {
-    const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
-    const updateAuth = (newValue) => {
-        setUserInfo(newValue);
-    };
+  // ✅ Updates the user information in the context (used when user logs in/registers)
+  const updateAuth = (newValue) => {
+    setUserInfo(newValue);
+  };
 
-    return (
-        <AuthContext.Provider value={{ userInfo, updateAuth }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  /**
+   * 🔁 Refresh the latest user financial info (USD, PnL)
+   * This fetches fresh data from the backend for the current user
+   * Called after trades to reflect updated balance and profit/loss
+   */
+  const refreshUserInfo = async (username) => {
+    try {
+      const res = await fetchStatus(username);
+      setUserInfo((prev) => ({
+        ...prev,
+        usd: res.data.usd,
+        pnl: res.data.pnl,
+        realizedPNL: res.data.realizedPNL,
+        unrealizedPNL: res.data.unrealizedPNL,
+      }));
+    } catch (err) {
+      console.error("🔴 Failed to refresh user info:", err.message);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ userInfo, updateAuth, refreshUserInfo }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-// Custom hook for easy access
 export const useAuthContext = () => useContext(AuthContext);

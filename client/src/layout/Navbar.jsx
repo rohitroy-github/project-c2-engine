@@ -2,11 +2,9 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
 
 export default function Navbar() {
-
   const { userInfo } = useAuthContext();
   return (
     <nav className="bg-white shadow-md p-4 flex items-center justify-between font-montserrat">
-
       <div className="flex gap-6 text-gray-800 font-semibold text-sm md:text-base">
         <Link to="/register" className="hover:text-purple-600 transition">
           Register
@@ -25,8 +23,6 @@ export default function Navbar() {
           <span>${userInfo.usd.toFixed(2)} USD</span>
         </div>
       )}
-
-
     </nav>
   );
 }

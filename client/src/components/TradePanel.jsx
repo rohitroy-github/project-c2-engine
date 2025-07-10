@@ -6,33 +6,39 @@ export default function TradePanel({ defaultSymbol = "ETH_SUB1" }) {
   const [symbol, setSymbol] = useState(defaultSymbol);
   const [side, setSide] = useState("BUY");
   const [amountUSD, setAmountUSD] = useState("");
-  const { userInfo } = useAuthContext();
+const { userInfo, refreshUserInfo } = useAuthContext(); 
 
 
-  const handleTrade = async () => {
-    const amount = parseFloat(amountUSD);
+const handleTrade = async () => {
+  const amount = parseFloat(amountUSD);
 
-    if (!amount || amount <= 0) {
-      alert("⚠️ Enter a valid amount greater than 0.");
-      return;
-    }
+  if (!amount || amount <= 0) {
+    alert("⚠️ Enter a valid amount greater than 0.");
+    return;
+  }
 
-    try {
-      const res = await makeTrade({
-        username: userInfo.username,
-        symbol,
-        side,
-        amountUSD: amount,
-      });
+  try {
+    const res = await makeTrade({
+      username: userInfo.username,
+      symbol,
+      side,
+      amountUSD: amount,
+    });
 
+    if (res.data.success) {
       alert(res.data.message || "✅ Trade successful.");
-      setAmountUSD(""); // Clear input
-    } catch (err) {
-      const message =
-        err.response?.data?.error || err.message || "Unknown error occurred.";
-      alert("❌ Trade failed: " + message);
+      await refreshUserInfo(userInfo.username); 
+      setAmountUSD("");
+    } else {
+      alert("❌ Trade failed: " + (res.data.message || "Unknown error"));
     }
-  };
+  } catch (err) {
+    const message =
+      err.response?.data?.error || err.message || "Unknown error occurred.";
+    alert("❌ Trade failed: " + message);
+  }
+};
+
 
   const toggleSide = () => {
     setSide((prev) => (prev === "BUY" ? "SELL" : "BUY"));
