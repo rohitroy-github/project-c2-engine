@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   /**
    * 🔁 Refresh the latest user financial info (USD, PnL)
    * This fetches fresh data from the backend for the current user
-   * Called after trades to reflect updated balance and profit/loss
+   * Called after trades to reflect updated balance and profit/loss affected balance
    */
   const refreshUserInfo = async (username) => {
     try {
