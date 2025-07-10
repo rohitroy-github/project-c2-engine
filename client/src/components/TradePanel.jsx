@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { makeTrade } from "../api";
+import { useAuthContext } from "../context/authContext";
 
-export default function TradePanel({ user, defaultSymbol = "ETH_SUB1" }) {
+export default function TradePanel({ defaultSymbol = "ETH_SUB1" }) {
   const [symbol, setSymbol] = useState(defaultSymbol);
   const [side, setSide] = useState("BUY");
   const [amountUSD, setAmountUSD] = useState("");
+  const { userInfo } = useAuthContext();
+
 
   const handleTrade = async () => {
     const amount = parseFloat(amountUSD);
@@ -16,7 +19,7 @@ export default function TradePanel({ user, defaultSymbol = "ETH_SUB1" }) {
 
     try {
       const res = await makeTrade({
-        username: user,
+        username: userInfo.username,
         symbol,
         side,
         amountUSD: amount,
@@ -55,22 +58,19 @@ export default function TradePanel({ user, defaultSymbol = "ETH_SUB1" }) {
       <div>
         <label className="text-sm text-gray-600 mb-1 block">Action</label>
         <div
-          className={`w-full flex items-center justify-between px-1 py-1 rounded-md cursor-pointer transition-colors ${
-            side === "BUY" ? "bg-green-100" : "bg-red-100"
-          }`}
+          className={`w-full flex items-center justify-between px-1 py-1 rounded-md cursor-pointer transition-colors ${side === "BUY" ? "bg-green-100" : "bg-red-100"
+            }`}
           onClick={toggleSide}
         >
           <div
-            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${
-              side === "BUY" ? "bg-green-400 text-white" : "text-gray-600"
-            }`}
+            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${side === "BUY" ? "bg-green-400 text-white" : "text-gray-600"
+              }`}
           >
             Buy
           </div>
           <div
-            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${
-              side === "SELL" ? "bg-red-400 text-white" : "text-gray-600"
-            }`}
+            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${side === "SELL" ? "bg-red-400 text-white" : "text-gray-600"
+              }`}
           >
             Sell
           </div>

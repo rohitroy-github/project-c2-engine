@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { createUser } from "../api";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/authContext";
 
-export default function RegisterPage({ setUserInfo }) {
+export default function RegisterPage() {
+
+  const { updateAuth } = useAuthContext();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -35,10 +38,10 @@ export default function RegisterPage({ setUserInfo }) {
       const response = await createUser(form.username);
 
       if (response.data?.balance) {
-        setUserInfo({
+        updateAuth({
           username: form.username,
           usd: response.data.balance.initialUsd,
-        });
+        })
 
         console.log("📝 Registration data:", userPayload);
         alert("✅ User registered successfully!");
