@@ -1,48 +1,81 @@
-import { useState } from "react";
-import { makeTrade } from "../api";
+import { useEffect, useState } from "react";
+import { makeTrade, fetchPrices } from "../api";
 import { useAuthContext } from "../context/authContext";
 
 export default function TradePanel({ defaultSymbol = "ETH_SUB1" }) {
   const [symbol, setSymbol] = useState(defaultSymbol);
   const [side, setSide] = useState("BUY");
   const [amountUSD, setAmountUSD] = useState("");
-const { userInfo, refreshUserInfo } = useAuthContext(); 
+  const [priceMap, setPriceMap] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { userInfo, refreshUserInfo } = useAuthContext();
 
-const handleTrade = async () => {
-  const amount = parseFloat(amountUSD);
+  // Fetch live prices
+  useEffect(() => {
+    const fetchPriceData = async () => {
+      try {
+        const res = await fetchPrices();
+        // console.log(res);
+        setPriceMap(res.data?.prices || {});
+      } catch (err) {
+        console.error("Failed to fetch prices:", err.message);
+      }
+    };
 
-  if (!amount || amount <= 0) {
-    alert("⚠️ Enter a valid amount greater than 0.");
-    return;
-  }
+    fetchPriceData();
 
-  try {
-    const res = await makeTrade({
-      username: userInfo.username,
-      symbol,
-      side,
-      amountUSD: amount,
-    });
+    const interval = setInterval(fetchPriceData, 1000); // refresh every second
+    return () => clearInterval(interval);
+  }, []);
 
-    if (res.data.success) {
-      alert(res.data.message || "✅ Trade successful.");
-      await refreshUserInfo(userInfo.username); 
-      setAmountUSD("");
-    } else {
-      alert("❌ Trade failed: " + (res.data.message || "Unknown error"));
+  const handleTrade = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const amount = parseFloat(amountUSD);
+
+    if (!amount || amount <= 0) {
+      alert("⚠️ Enter a valid amount greater than 0.");
+      setIsSubmitting(false);
+
+      return;
     }
-  } catch (err) {
-    const message =
-      err.response?.data?.error || err.message || "Unknown error occurred.";
-    alert("❌ Trade failed: " + message);
-  }
-};
 
+    try {
+      const res = await makeTrade({
+        username: userInfo.username,
+        symbol,
+        side,
+        amountUSD: amount,
+      });
+
+      if (res.data.success) {
+        alert(res.data.message || "✅ Trade successful.");
+        await refreshUserInfo(userInfo.username);
+        setAmountUSD("");
+      } else {
+        alert("❌ Trade failed: " + (res.data.message || "Unknown error"));
+      }
+    } catch (err) {
+      const message =
+        err.response?.data?.error || err.message || "Unknown error occurred.";
+      alert("❌ Trade failed: " + message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const toggleSide = () => {
     setSide((prev) => (prev === "BUY" ? "SELL" : "BUY"));
   };
+
+  const assetPrice = priceMap[symbol] || 0;
+  const holdingQty = userInfo?.holdings?.[symbol]?.quantity || 0;
+  console.log(userInfo);
+  const requiredMargin = parseFloat(amountUSD || 0).toFixed(2);
+  const buyingQuantity =
+    assetPrice > 0 && amountUSD > 0 ? (amountUSD / assetPrice).toFixed(4) : "0";
 
   return (
     <div className="font-montserrat space-y-5">
@@ -64,19 +97,22 @@ const handleTrade = async () => {
       <div>
         <label className="text-sm text-gray-600 mb-1 block">Action</label>
         <div
-          className={`w-full flex items-center justify-between px-1 py-1 rounded-md cursor-pointer transition-colors ${side === "BUY" ? "bg-green-100" : "bg-red-100"
-            }`}
+          className={`w-full flex items-center justify-between px-1 py-1 rounded-md cursor-pointer transition-colors ${
+            side === "BUY" ? "bg-green-100" : "bg-red-100"
+          }`}
           onClick={toggleSide}
         >
           <div
-            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${side === "BUY" ? "bg-green-400 text-white" : "text-gray-600"
-              }`}
+            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${
+              side === "BUY" ? "bg-green-400 text-white" : "text-gray-600"
+            }`}
           >
             Buy
           </div>
           <div
-            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${side === "SELL" ? "bg-red-400 text-white" : "text-gray-600"
-              }`}
+            className={`w-1/2 text-center py-2 rounded-md transition-colors font-semibold ${
+              side === "SELL" ? "bg-red-400 text-white" : "text-gray-600"
+            }`}
           >
             Sell
           </div>
@@ -94,6 +130,16 @@ const handleTrade = async () => {
           onChange={(e) => setAmountUSD(e.target.value)}
           className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400"
         />
+
+        {/* Buying Quantity Display */}
+        <div className="flex justify-between mt-2">
+          <span className="font-medium text-gray-700">Quantity</span>
+          <span className="text-indigo-700">
+            {assetPrice > 0 && amountUSD > 0
+              ? (amountUSD / assetPrice).toFixed(4)
+              : "0"}
+          </span>
+        </div>
       </div>
 
       {/* Submit Button */}
@@ -103,6 +149,35 @@ const handleTrade = async () => {
       >
         Execute
       </button>
+
+      {/* 🧾 Trade Info Section */}
+      {userInfo && (
+        <div className="text-sm mt-2 bg-indigo-50  border-indigo-500 rounded-md p-4 space-y-2 shadow-sm">
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Required margin</span>
+            <span className="text-indigo-600">${requiredMargin}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Available margin:</span>
+            <span className="text-indigo-600">${userInfo.usd.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Asset price</span>
+            <span className="text-indigo-600">${assetPrice.toFixed(3)}</span>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="font-medium text-gray-700">Position quantity</span>
+            <span className="text-indigo-600">{buyingQuantity}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Holding quantity</span>
+            <span className="text-indigo-600">
+              {holdingQty.toFixed(4)} {symbol}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

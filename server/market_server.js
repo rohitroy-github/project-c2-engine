@@ -195,6 +195,25 @@ app.get("/status/:user", (req, res) => {
   });
 });
 
+/**
+ * GET /prices
+ *
+ * Purpose: Fetch the current price of all available assets.
+ *
+ * Returns:
+ * {
+ *   prices: {
+ *     ETH_SUB1: { price: number, history: number[] },
+ *     ETH_SUB2: { ... },
+ *     ...
+ *   }
+ * }
+ */
+app.get("/prices", (req, res) => {
+  const prices = getCurrentPrices();
+  res.send({ prices });
+});
+
 // Price update loop
 setInterval(() => {
   updatePrices();
@@ -207,7 +226,6 @@ setInterval(() => {
   const leaderboard = getLeaderboard();
   console.log(`🔄 Prices Updated:`, prices);
   io.emit("prices", { prices, leaderboard });
-}, 3000
-);
+}, 3000);
 
 server.listen(3000, () => console.log("🚀 Market server running on port 3000"));
