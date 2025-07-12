@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
         pnl: res.data.pnl,
         realizedPNL: res.data.realizedPNL,
         unrealizedPNL: res.data.unrealizedPNL,
+        holdings: res.data.holdings,
       }));
     } catch (err) {
       console.error("🔴 Failed to refresh user info:", err.message);
