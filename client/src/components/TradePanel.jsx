@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { makeTrade, fetchPrices } from "../api";
 import { useAuthContext } from "../context/authContext";
 
-export default function TradePanel({ defaultSymbol = "ETH_SUB1" }) {
-  const [symbol, setSymbol] = useState(defaultSymbol);
+export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
+  const symbol = selectedSymbol;
+
   const [side, setSide] = useState("BUY");
   const [amountUSD, setAmountUSD] = useState("");
   const [priceMap, setPriceMap] = useState({});
@@ -72,25 +73,20 @@ export default function TradePanel({ defaultSymbol = "ETH_SUB1" }) {
 
   const assetPrice = priceMap[symbol] || 0;
   const holdingQty = userInfo?.holdings?.[symbol]?.quantity || 0;
-  console.log(userInfo);
   const requiredMargin = parseFloat(amountUSD || 0).toFixed(2);
   const buyingQuantity =
     assetPrice > 0 && amountUSD > 0 ? (amountUSD / assetPrice).toFixed(4) : "0";
 
   return (
     <div className="font-montserrat space-y-5">
-      {/* Select Asset */}
-      <div>
-        <label className="text-sm text-gray-600 mb-1 block">Select Asset</label>
-        <select
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400"
-        >
-          <option value="ETH_SUB1">ETH - S1</option>
-          <option value="ETH_SUB2">ETH - S2</option>
-          <option value="ETH_SUB3">ETH - S3</option>
-        </select>
+      {/* ✅ Show the current selected asset */}
+      <div className="mb-3">
+        <label className="text-sm text-gray-600 mb-1 block">
+          Selected Asset
+        </label>
+        <div className="px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 font-semibold">
+          {symbol}
+        </div>
       </div>
 
       {/* Toggle Side */}
