@@ -55,14 +55,17 @@ Each user starts with a virtual balance of **$10,000 USD**. The platform simulat
 
 ## Tech Stack
 
-| Layer        | Technology                    |
-|--------------|-------------------------------|
-| Frontend     | React, Tailwind CSS, Axios    |
-| Backend      | Express.js, Socket.io         |
-| Charting     | Recharts (for price history)  |
-| Logging      | Separate Express log server   |
-| Mock Assets  | Defined in `assets.js`        |
-| State Mgmt   | React Hooks                   |
+## Tech Stack
+
+| Layer        | Technology                          |
+|--------------|--------------------------------------|
+| Frontend     | React, Tailwind CSS, Axios           |
+| Backend      | Express.js, Socket.io                |
+| Charting     | Recharts (for price history)         |
+| Logging      | Separate Express log server          |
+| Mock Assets  | Defined in `assets.js`               |
+| State Mgmt   | React Hooks, React Context API       |
+
 
 ---
 
@@ -70,9 +73,13 @@ Each user starts with a virtual balance of **$10,000 USD**. The platform simulat
 
 - To run the **market server**, run:
 ```
+cd server
+npm install
 npm run market
 ```
 - To run the **frontend application**, run:
 ```
+cd client
+npm install
 npm run app
 ```
