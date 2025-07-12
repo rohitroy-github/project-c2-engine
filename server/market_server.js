@@ -7,6 +7,7 @@ const axios = require("axios");
 const { updatePrices, getCurrentPrices } = require("./priceEngine");
 const { users, createUser, trade, calculatePNL } = require("./users");
 const { getLeaderboard } = require("./leaderboard");
+const assets = require("./assets");
 
 const app = express();
 const server = http.createServer(app);
@@ -212,6 +213,23 @@ app.get("/status/:user", (req, res) => {
 app.get("/prices", (req, res) => {
   const prices = getCurrentPrices();
   res.send({ prices });
+});
+
+// 📦 [GET] /assets
+// ------------------------------------
+// Purpose: Expose all tradable asset data to the frontend.
+// This is used to dynamically populate dropdowns and asset-related UIs.
+//
+// Response Format:
+// {
+//   assets: [
+//     { symbol: "ETH_SUB1", name: "ETH - S1 Coin", basePrice: 5000 },
+//     ...
+//   ]
+// }
+//
+app.get("/assets", (req, res) => {
+  res.send({ assets });
 });
 
 // Price update loop
