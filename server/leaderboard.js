@@ -15,6 +15,8 @@ function getLeaderboard() {
         name,
         pnl: data.pnl,
         holdings,
+        realizedPNL: parseFloat(data.realizedPNL.toFixed(2)),
+        unrealizedPNL: parseFloat(data.unrealizedPNL.toFixed(2)),
       };
     })
     .sort((a, b) => b.pnl - a.pnl);
