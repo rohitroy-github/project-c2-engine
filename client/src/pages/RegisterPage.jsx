@@ -67,7 +67,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center font-montserrat">
       <div className="bg-white shadow-xl p-8 rounded-lg w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Let's sign up !
+          Let's sign up 📝
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -130,7 +130,7 @@ export default function RegisterPage() {
             type="submit"
             className="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-md transition"
           >
-            Register
+            Sign Up
           </button>
         </form>
       </div>

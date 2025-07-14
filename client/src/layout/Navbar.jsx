@@ -9,11 +9,17 @@ export default function Navbar() {
         <Link to="/register" className="hover:text-purple-600 transition">
           Register
         </Link>
+        <Link to="/login" className="hover:text-purple-600 transition">
+          Login
+        </Link>
         <Link to="/trade" className="hover:text-purple-600 transition">
           Trade
         </Link>
         <Link to="/leaderboard" className="hover:text-purple-600 transition">
           Leaderboard
+        </Link>
+                <Link to="/dashboard" className="hover:text-purple-600 transition">
+          Dashboard
         </Link>
       </div>
 
