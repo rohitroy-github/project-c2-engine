@@ -51,7 +51,7 @@ app.post("/user", (req, res) => {
  *   username: string,      // The user's unique identifier
  *   symbol: string,        // The asset symbol (e.g., FAKEBTC)
  *   side: "BUY" | "SELL",  // Trade type
- *   amountUSD: number      // USD value to trade
+ *   amountINR: number      // INR value to trade
  * }
  *
  * Workflow:
@@ -76,7 +76,7 @@ app.post("/user", (req, res) => {
  * - Returns clear error messages for invalid users, symbols, or insufficient balance/holdings.
  */
 app.post("/trade", (req, res) => {
-  const { username, symbol, side, amountUSD } = req.body;
+  const { username, symbol, side, amountINR } = req.body;
 
   // Check for user availability
   if (!users[username]) {
@@ -87,7 +87,7 @@ app.post("/trade", (req, res) => {
   }
 
   console.log(
-    `👉 [POST] /trade | User: ${username} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`
+    `👉 [POST] /trade | User: ${username} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountINR}`
   );
 
   const prices = getCurrentPrices();
@@ -101,7 +101,7 @@ app.post("/trade", (req, res) => {
   }
 
   // Attempt trade
-  const result = trade(username, symbol, side, amountUSD, prices[symbol]);
+  const result = trade(username, symbol, side, amountINR, prices[symbol]);
 
   if (result.success) {
     calculatePNL(username, prices);
@@ -112,7 +112,7 @@ app.post("/trade", (req, res) => {
       username,
       symbol,
       side,
-      amountUSD,
+      amountINR,
       price: prices[symbol],
       timestamp: Date.now(),
     });
@@ -156,9 +156,9 @@ app.get("/leaderboard", (req, res) => {
  * Purpose: Fetch a user's current trading status.
  *
  * Returns:
- * - The user's current USD balance.
+ * - The user's current INR balance.
  * - Current holdings (symbol => quantity).
- * - Current PnL (profit or loss compared to initial USD).
+ * - Current PnL (profit or loss compared to initial INR).
  * - Latest simulated asset prices.
  *
  * Notes:
@@ -182,12 +182,12 @@ app.get("/status/:user", (req, res) => {
   const pnl = calculatePNL(user, prices);
 
   console.log(
-    `💹 [STATUS] User: ${user} | USD: ${users[user].usd} | PnL: ${pnl}`
+    `💹 [STATUS] User: ${user} | INR: ${users[user].inr} | PnL: ${pnl}`
   );
 
   res.send({
     name: user,
-    usd: users[user].usd,
+    inr: users[user].inr,
     holdings: users[user].holdings,
     pnl,
     realizedPNL: users[user].realizedPNL,

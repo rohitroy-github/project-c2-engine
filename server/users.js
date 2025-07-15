@@ -1,4 +1,5 @@
 const assets = require("./assets");
+const { convertToINR } = require('./crons/currencyRateCache');
 
 const users = {};
 
@@ -13,8 +14,8 @@ function createUser(name) {
 
   users[name] = {
     username: name,
-    initialUsd: 10000,
-    usd: 10000,
+    initialInr: convertToINR(1162.70),
+    inr: convertToINR(1162.70),
     holdings: initialHoldings,
     pnl: 0,
     realizedPNL: 0,
@@ -22,11 +23,11 @@ function createUser(name) {
   };
 }
 
-function trade(user, symbol, side, amountUSD, price) {
-  const quantity = amountUSD / price;
+function trade(user, symbol, side, amountINR, price) {
+  const quantity = amountINR / price;
 
   if (side === "BUY") {
-    if (users[user].usd < amountUSD) {
+    if (users[user].inr < amountINR) {
       return {
         success: false,
         message: "Insufficient funds for this buy order.",
@@ -37,13 +38,13 @@ function trade(user, symbol, side, amountUSD, price) {
       quantity: 0,
       costBasis: 0,
     };
-    const totalCost = holding.quantity * holding.costBasis + amountUSD;
+    const totalCost = holding.quantity * holding.costBasis + amountINR;
     const newQuantity = holding.quantity + quantity;
 
     // New average cost basis
     const newCostBasis = totalCost / newQuantity;
 
-    users[user].usd -= amountUSD;
+    users[user].inr -= amountINR;
 
     users[user].holdings[symbol] = {
       quantity: newQuantity,
@@ -61,7 +62,7 @@ function trade(user, symbol, side, amountUSD, price) {
 
     // Realized Profit = (sell price - cost basis) * quantity
     const cost = quantity * holding.costBasis;
-    const revenue = amountUSD;
+    const revenue = amountINR;
     const pnl = revenue - cost;
 
     // Adjust holdings
@@ -71,7 +72,7 @@ function trade(user, symbol, side, amountUSD, price) {
       delete users[user].holdings[symbol];
     }
 
-    users[user].usd += amountUSD;
+    users[user].inr += amountINR;
     users[user].realizedPNL += parseFloat(pnl.toFixed(2));
 
     return {

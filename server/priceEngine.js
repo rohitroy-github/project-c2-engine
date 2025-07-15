@@ -1,4 +1,5 @@
 const assets = require('./assets');
+const { convertToINR } = require('./crons/currencyRateCache');
 
 const priceState = {}; 
 
@@ -21,8 +22,10 @@ function updatePrices() {
 }
 
 function getCurrentPrices() {
+  // Convert all prices to INR using the cached exchange rate
   return Object.fromEntries(
-    Object.entries(priceState).map(([symbol, data]) => [symbol, data.price])
+    Object.entries(priceState).map(([symbol, data]) => [symbol, convertToINR(data.price)])
+
   );
 }
 

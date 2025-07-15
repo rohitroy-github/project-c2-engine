@@ -28,7 +28,7 @@ export default function Portfolio({ user }) {
       <h2 className="text-2xl font-bold mb-2">👤 User: {user}</h2>
 
       <div className="space-y-1 text-sm">
-        <p>💵 <strong>USD Balance:</strong> ${status.usd.toFixed(2)}</p>
+        <p>💵 <strong>INR Balance:</strong> ${status.inr.toFixed(2)}</p>
         <p>📈 <strong>Total PnL:</strong> ${status.pnl}</p>
         <p>📊 <strong>Unrealized PnL:</strong> ${status.unrealizedPNL}</p>
         <p>💰 <strong>Realized PnL:</strong> ${status.realizedPNL}</p>

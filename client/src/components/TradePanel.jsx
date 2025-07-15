@@ -6,7 +6,7 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
   const symbol = selectedSymbol;
 
   const [side, setSide] = useState("BUY");
-  const [amountUSD, setAmountUSD] = useState("");
+  const [amountINR, setAmountINR] = useState("");
   const [priceMap, setPriceMap] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,7 +34,7 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const amount = parseFloat(amountUSD);
+    const amount = parseFloat(amountINR);
 
     if (!amount || amount <= 0) {
       alert("⚠️ Enter a valid amount greater than 0.");
@@ -48,13 +48,13 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
         username: userInfo.username,
         symbol,
         side,
-        amountUSD: amount,
+        amountINR: amount,
       });
 
       if (res.data.success) {
         alert(res.data.message || "✅ Trade successful.");
         await refreshUserInfo(userInfo.username);
-        setAmountUSD("");
+        setAmountINR("");
       } else {
         alert("❌ Trade failed: " + (res.data.message || "Unknown error"));
       }
@@ -73,9 +73,9 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
 
   const assetPrice = priceMap[symbol] || 0;
   const holdingQty = userInfo?.holdings?.[symbol]?.quantity || 0;
-  const requiredMargin = parseFloat(amountUSD || 0).toFixed(2);
+  const requiredMargin = parseFloat(amountINR || 0).toFixed(2);
   const buyingQuantity =
-    assetPrice > 0 && amountUSD > 0 ? (amountUSD / assetPrice).toFixed(4) : "0";
+    assetPrice > 0 && amountINR > 0 ? (amountINR / assetPrice).toFixed(4) : "0";
 
   return (
     <div className="font-montserrat space-y-5">
@@ -117,13 +117,13 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
 
       {/* Amount */}
       <div>
-        <label className="text-sm text-gray-600 mb-1 block">Amount (USD)</label>
+        <label className="text-sm text-gray-600 mb-1 block">Amount (INR)</label>
         <input
           type="number"
           min={0}
-          placeholder="Enter USD amount"
-          value={amountUSD}
-          onChange={(e) => setAmountUSD(e.target.value)}
+          placeholder="Enter INR amount"
+          value={amountINR}
+          onChange={(e) => setAmountINR(e.target.value)}
           className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400"
         />
 
@@ -131,8 +131,8 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
         <div className="flex justify-between mt-2">
           <span className="font-medium text-gray-700">Quantity</span>
           <span className="text-indigo-700">
-            {assetPrice > 0 && amountUSD > 0
-              ? (amountUSD / assetPrice).toFixed(4)
+            {assetPrice > 0 && amountINR > 0
+              ? (amountINR / assetPrice).toFixed(4)
               : "0"}
           </span>
         </div>
@@ -155,7 +155,7 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
           </div>
           <div className="flex justify-between">
             <span className="font-medium text-gray-700">Available margin:</span>
-            <span className="text-indigo-600">${userInfo.usd.toFixed(2)}</span>
+            <span className="text-indigo-600">${userInfo.inr.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium text-gray-700">Asset price</span>

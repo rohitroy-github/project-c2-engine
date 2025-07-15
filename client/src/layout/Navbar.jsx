@@ -26,7 +26,7 @@ export default function Navbar() {
       {userInfo?.username && (
         <div className="flex items-center justify-end gap-3 bg-indigo-600 text-white font-bold px-4 py-2 rounded-md shadow-md">
           <span>{userInfo.username}</span>
-          <span>${userInfo.usd.toFixed(2)} USD</span>
+          <span>₹{userInfo.inr.toFixed(2)} INR</span>
         </div>
       )}
     </nav>

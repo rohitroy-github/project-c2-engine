@@ -29,28 +29,28 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div className="bg-purple-100 p-4 rounded">
             <p className="text-gray-600 text-sm">Username</p>
-            <p className="text-lg font-semibold">{userInfo.username}</p>
+            <p className="text-lg font-semibold">{userInfo?.username}</p>
           </div>
           <div className="bg-green-100 p-4 rounded">
-            <p className="text-gray-600 text-sm">USD Balance</p>
-            <p className="text-lg font-semibold">${userInfo.usd.toFixed(2)}</p>
+            <p className="text-gray-600 text-sm">INR Balance</p>
+            <p className="text-lg font-semibold">₹{(userInfo.inr || 0).toFixed(2)}</p>
           </div>
           <div className="bg-yellow-100 p-4 rounded">
             <p className="text-gray-600 text-sm">Realized PnL</p>
             <p className="text-lg font-semibold text-yellow-700">
-              ${userInfo.realizedPNL.toFixed(2)}
+              ₹{(userInfo.realizedPNL || 0).toFixed(2)}
             </p>
           </div>
           <div className="bg-blue-100 p-4 rounded">
             <p className="text-gray-600 text-sm">Unrealized PnL</p>
             <p className="text-lg font-semibold text-blue-700">
-              ${userInfo.unrealizedPNL.toFixed(2)}
+              ₹{(userInfo?.unrealizedPNL || 0).toFixed(2)}
             </p>
           </div>
           <div className="bg-indigo-100 p-4 rounded sm:col-span-2">
             <p className="text-gray-600 text-sm">Total PnL</p>
             <p className="text-2xl font-bold text-indigo-700">
-              ${(userInfo.pnl || 0).toFixed(2)}
+              ₹{(userInfo.pnl || 0).toFixed(2)}
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function DashboardPage() {
                   <tr key={symbol}>
                     <td className="p-2 border">{symbol}</td>
                     <td className="p-2 border">{data.quantity.toFixed(4)}</td>
-                    <td className="p-2 border">${data.costBasis.toFixed(2)}</td>
+                    <td className="p-2 border">₹{data.costBasis.toFixed(2)}</td>
                   </tr>
                 ) : null
               )} */}
