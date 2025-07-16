@@ -1,5 +1,4 @@
 const assets = require("./assets");
-const { convertToINR } = require('./crons/currencyRateCache');
 
 const users = {};
 
@@ -14,8 +13,8 @@ function createUser(name) {
 
   users[name] = {
     username: name,
-    initialInr: convertToINR(1162.70),
-    inr: convertToINR(1162.70),
+    initialInr: 10000,
+    inr: 10000,
     holdings: initialHoldings,
     pnl: 0,
     realizedPNL: 0,
