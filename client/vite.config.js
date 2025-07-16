@@ -4,5 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server:{
+    watch: {
+      usePolling: true, // Use polling to detect file changes
+    }
+  },
   plugins: [tailwindcss(), react()],
 });

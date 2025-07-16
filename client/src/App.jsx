@@ -11,6 +11,7 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import { AuthProvider } from "./context/authContext";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -21,9 +22,9 @@ function App() {
           <Route path="/" element={<Navigate to="/register" />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/trade" element={<TradePage />} />
+          <Route path="/trade" element={<ProtectedRoute><TradePage /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /> </ProtectedRoute>} />
         </Routes>
       </AuthProvider>
     </Router>
