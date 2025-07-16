@@ -32,16 +32,16 @@ app.post('/user', (req, res) => {
 // POST /trade
 app.post('/trade', (req, res) => {
   const { user, symbol, side, amountUSD } = req.body;
-  console.log(`👉 [POST] /trade | User: ${user} | Symbol: ${symbol} | Side: ${side} | Amount: $${amountUSD}`);
+  console.log(`👉 [POST] /trade | User: ${user} | Symbol: ${symbol} | Side: ${side} | Amount: ₹${amountUSD}`);
 
   const prices = getCurrentPrices();
   const currentPrice = prices[symbol];
-  console.log(`📊 Current Price of ${symbol}: $${currentPrice}`);
+  console.log(`📊 Current Price of ${symbol}: ₹${currentPrice}`);
 
   const success = trade(user, symbol, side, amountUSD, currentPrice);
   const pnl = calculatePNL(user, prices);
 
-  console.log(`💹 Trade ${success ? 'executed' : 'failed'} | PnL: $${pnl.toFixed(2)}`);
+  console.log(`💹 Trade ${success ? 'executed' : 'failed'} | PnL: ₹${pnl.toFixed(2)}`);
   console.log(`📦 Updated Portfolio for ${user}:`, users[user]);
 
   res.send({ success, user: users[user] });

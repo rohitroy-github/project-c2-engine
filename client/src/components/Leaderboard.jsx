@@ -32,9 +32,9 @@ export default function Leaderboard() {
               <tr key={user.name} className="hover:bg-gray-50">
                 <td className="p-3 border text-center font-medium">{idx + 1}</td>
                 <td className="p-3 border">{user.name}</td>
-                <td className="p-3 border text-right">${user.pnl.toFixed(2)}</td>
-                <td className="p-3 border text-right">${user.unrealizedPNL?.toFixed(2) || 0}</td>
-                <td className="p-3 border text-right">${user.realizedPNL?.toFixed(2) || 0}</td>
+                <td className="p-3 border text-right">₹{user.pnl.toFixed(2)}</td>
+                <td className="p-3 border text-right">₹{user.unrealizedPNL?.toFixed(2) || 0}</td>
+                <td className="p-3 border text-right">₹{user.realizedPNL?.toFixed(2) || 0}</td>
               </tr>
             ))
           )}

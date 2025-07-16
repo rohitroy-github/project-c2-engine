@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * 🔁 Refresh the latest user financial info (USD, PnL)
+   * 🔁 Refresh the latest user financial info (INR, PnL)
    * This fetches fresh data from the backend for the current user
    * Called after trades to reflect updated balance and profit/loss affected balance
    */
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       const res = await fetchStatus(username);
       setUserInfo((prev) => ({
         ...prev,
-        usd: res.data.usd,
+        inr: res.data.inr,
         pnl: res.data.pnl,
         realizedPNL: res.data.realizedPNL,
         unrealizedPNL: res.data.unrealizedPNL,

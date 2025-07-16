@@ -6,7 +6,7 @@ A web-based application that simulates real-time cryptocurrency trading. Users c
 
 ## Overview
 
-Each user starts with a virtual balance of **$10,000 USD**. The platform simulates asset price volatility and allows users to:
+Each user starts with a virtual balance of **₹10,000 INR**. The platform simulates asset price volatility and allows users to:
 
 - Buy/sell mock crypto assets
 - Monitor price changes in real-time
@@ -21,7 +21,7 @@ Each user starts with a virtual balance of **$10,000 USD**. The platform simulat
 ### User Management
 - Register using a unique `username`
 - Optional fields: `name`, `wallet address`, `age`
-- Each new user is initialized with $10,000
+- Each new user is initialized with ₹10,000
 
 ### Market Simulation
 - Asset prices update every **500ms**
@@ -32,7 +32,7 @@ Each user starts with a virtual balance of **$10,000 USD**. The platform simulat
   - `ETH_SUB3`
 
 ### Trading System
-- Buy and sell assets using virtual USD
+- Buy and sell assets using virtual INR
 - Dynamic trade quantity based on live price
 - Holdings maintain `quantity` and `cost basis`
 - Profit and Loss (PnL):

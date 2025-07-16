@@ -20,10 +20,10 @@ export default function LoginPage() {
 
     try {
       const res = await fetchStatus(username);
-      if (res.data?.usd !== undefined) {
+      if (res.data?.inr !== undefined) {
         updateAuth({
           username,
-          usd: res.data.usd,
+          inr: res.data.inr,
           pnl: res.data.pnl,
           realizedPNL: res.data.realizedPNL,
           unrealizedPNL: res.data.unrealizedPNL,

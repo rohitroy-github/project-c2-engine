@@ -40,7 +40,7 @@ export default function RegisterPage() {
       if (response.data?.balance) {
         updateAuth({
           username: form.username,
-          usd: response.data.balance.initialUsd,
+          inr: response.data.balance.initialInr,
         })
 
         console.log("📝 Registration data:", userPayload);

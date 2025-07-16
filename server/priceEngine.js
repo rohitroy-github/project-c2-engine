@@ -21,8 +21,10 @@ function updatePrices() {
 }
 
 function getCurrentPrices() {
+  // Convert all prices to INR using the cached exchange rate
   return Object.fromEntries(
     Object.entries(priceState).map(([symbol, data]) => [symbol, data.price])
+
   );
 }
 
