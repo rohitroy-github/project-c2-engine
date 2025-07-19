@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAuthContext } from "../context/authContext";
-import { fetchStatus } from "../api";
+// import { fetchStatus } from "../api";
 
 export default function DashboardPage() {
   const { userInfo, refreshUserInfo } = useAuthContext();
@@ -33,7 +33,9 @@ export default function DashboardPage() {
           </div>
           <div className="bg-green-100 p-4 rounded">
             <p className="text-gray-600 text-sm">INR Balance</p>
-            <p className="text-lg font-semibold">₹{(userInfo.inr || 0).toFixed(2)}</p>
+            <p className="text-lg font-semibold">
+              ₹{(userInfo.inr || 0).toFixed(2)}
+            </p>
           </div>
           <div className="bg-yellow-100 p-4 rounded">
             <p className="text-gray-600 text-sm">Realized PnL</p>
@@ -68,15 +70,26 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {/* {Object.entries(userInfo.holdings).map(([symbol, data]) =>
-                data.quantity > 0 ? (
-                  <tr key={symbol}>
-                    <td className="p-2 border">{symbol}</td>
-                    <td className="p-2 border">{data.quantity.toFixed(4)}</td>
-                    <td className="p-2 border">₹{data.costBasis.toFixed(2)}</td>
-                  </tr>
-                ) : null
-              )} */}
+              {userInfo?.holdings &&
+              Object.entries(userInfo.holdings).length > 0 ? (
+                Object.entries(userInfo.holdings).map(([symbol, data]) =>
+                  data.quantity > 0 ? (
+                    <tr key={symbol}>
+                      <td className="p-2 border">{symbol}</td>
+                      <td className="p-2 border">{data.quantity.toFixed(4)}</td>
+                      <td className="p-2 border">
+                        ₹{data.costBasis.toFixed(2)}
+                      </td>
+                    </tr>
+                  ) : null
+                )
+              ) : (
+                <tr>
+                  <td className="p-2 border">0</td>
+                  <td className="p-2 border">0</td>
+                  <td className="p-2 border">0 </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
