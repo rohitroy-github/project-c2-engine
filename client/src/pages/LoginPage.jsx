@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
 import { fetchStatus } from "../api";
 
@@ -85,6 +85,16 @@ export default function LoginPage() {
             Login
           </button>
         </form>
+
+        <p className="mt-6 text-center text-gray-600 text-sm">
+          New here?{" "}
+          <Link
+            to="/register"
+            className="text-purple-600 hover:text-purple-800 font-semibold transition"
+          >
+            Register now
+          </Link>
+        </p>
       </div>
     </div>
   );
