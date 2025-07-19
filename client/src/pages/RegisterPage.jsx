@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { createUser } from "../api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
 
 export default function RegisterPage() {
-
   const { updateAuth } = useAuthContext();
   const navigate = useNavigate();
 
@@ -41,7 +40,7 @@ export default function RegisterPage() {
         updateAuth({
           username: form.username,
           inr: response.data.balance.initialInr,
-        })
+        });
 
         console.log("📝 Registration data:", userPayload);
         alert("✅ User registered successfully!");
@@ -133,6 +132,16 @@ export default function RegisterPage() {
             Sign Up
           </button>
         </form>
+
+        <p className="mt-6 text-center text-gray-600 text-sm">
+          Have an account ?{" "}
+          <Link
+            to="/login"
+            className="text-purple-600 hover:text-purple-800 font-semibold transition"
+          >
+            Login Now 
+          </Link>
+        </p>
       </div>
     </div>
   );
