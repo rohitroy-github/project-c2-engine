@@ -1,0 +1,8 @@
+{
+  "name": "Beginner Champ",
+  "description": "First participation in Clash Of Tokens",
+  "image": "http://localhost:3000/beginner.png",
+  "attributes": [
+    { "trait_type": "Level", "value": "0" }
+  ]
+}

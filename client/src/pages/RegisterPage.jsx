@@ -139,7 +139,7 @@ export default function RegisterPage() {
             to="/login"
             className="text-purple-600 hover:text-purple-800 font-semibold transition"
           >
-            Login Now 
+            Login Now
           </Link>
         </p>
       </div>

@@ -1,0 +1,8 @@
+{
+  "name": "Clash Leader",
+  "description": "First 10 wins in Clash OF Tokens",
+  "image": "ipfs://Qm.../beginner.png",
+  "attributes": [
+    { "trait_type": "Level", "value": "2" }
+  ]
+}

@@ -150,27 +150,32 @@ export default function TradePanel({ selectedSymbol = "ETH_SUB1" }) {
       {userInfo && (
         <div className="text-sm mt-2 bg-indigo-50  border-indigo-500 rounded-md p-4 space-y-2 shadow-sm">
           <div className="flex justify-between">
-            <span className="font-medium text-gray-700">Required margin</span>
-            <span className="text-indigo-600">${requiredMargin}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="font-medium text-gray-700">Available margin:</span>
             <span className="text-indigo-600">${userInfo.inr.toFixed(2)}</span>
           </div>
+
           <div className="flex justify-between">
-            <span className="font-medium text-gray-700">Asset price</span>
-            <span className="text-indigo-600">${assetPrice.toFixed(3)}</span>
-          </div>
-          <div className="flex justify-between mt-2">
-            <span className="font-medium text-gray-700">Position quantity</span>
-            <span className="text-indigo-600">{buyingQuantity}</span>
+            <span className="font-medium text-gray-700 ">Holding quantity</span>
+            <span className="text-indigo-600  font-bold">
+              {holdingQty.toFixed(4)} {symbol}
+            </span>
           </div>
 
           <div className="flex justify-between">
-            <span className="font-medium text-gray-700">Holding quantity</span>
-            <span className="text-indigo-600">
-              {holdingQty.toFixed(4)} {symbol}
+            <span className="font-medium text-gray-700">Asset price</span>
+            <span className="text-indigo-600  font-bold">
+              ${assetPrice.toFixed(3)}
             </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Required margin</span>
+            <span className="text-indigo-600 font-bold">${requiredMargin}</span>
+          </div>
+
+          <div className="flex justify-between mt-2">
+            <span className="font-medium text-gray-700">Position quantity</span>
+            <span className="text-indigo-600 font-bold">{buyingQuantity}</span>
           </div>
         </div>
       )}

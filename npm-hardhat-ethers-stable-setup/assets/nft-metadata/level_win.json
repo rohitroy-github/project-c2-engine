@@ -1,0 +1,8 @@
+{
+  "name": "🥇 Winner",
+  "description": "Winner of the tournament.",
+  "image": "ipfs://Qm.../beginner.png",
+  "attributes": [
+    { "trait_type": "Level", "value": "Winner" }
+  ]
+}
