@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "market": "nodemon market_server.js",
-    "dev2": "nodemon index2.js",
+    "dev": "nodemon index2.js",
+    "ads": "nodemon asset-data-server.js",
     "logger": "nodemon tradelog_server.js"
   },
   "keywords": [],

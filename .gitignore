@@ -19,6 +19,7 @@ lerna-debug.log*
 # ========================================
 .env
 .env.*
+!.env.example
 
 # ========================================
 # OS-specific Files
@@ -76,6 +77,19 @@ pnpm-lock.yaml
 uploads/
 tmp/
 temp/
+
+# ========================================
+# Blockchain / Web3 Files
+# ========================================
+artifacts/
+cache/
+deployments/
+typechain/
+typechain-types/
+broadcast/
+*.t.sol
+*.abi.json
+*.dbg.json
 
 # ========================================
 # Rohit's Files

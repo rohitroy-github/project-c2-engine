@@ -1,0 +1,18 @@
+To run NFT contract locally.
+
+        There's a file in /server folder
+                assets/nft-metadata
+                which is hosted on a local server using express 
+                to run local server
+                        npm run ads
+                                http://localhost:3000/level_0.json
+                                http://localhost:3000/level_1.json
+                                http://localhost:3000/level_2.json
+
+                the nft-metadata architecture is as follows
+                        player completed a trading tournament 
+                                level_0.json
+                        player won a tournament
+                                level_1.json
+                        player won 10 tournaments
+                                level_3.json
