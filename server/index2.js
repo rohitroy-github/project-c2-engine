@@ -3,7 +3,7 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 
-const { updatePrices, getCurrentPrices } = require('./priceEngine');
+const { updatePrices, getCurrentPrices, maybeTriggerModelCall } = require('./priceEngine');
 const { users, createUser, trade, calculatePNL } = require('./users');
 const { getLeaderboard } = require('./leaderboard');
 
@@ -56,8 +56,9 @@ app.get('/leaderboard', (req, res) => {
 });
 
 // Price update loop
-setInterval(() => {
-  updatePrices();
+setInterval(async() => {
+  await maybeTriggerModelCall();  // Random model call
+  updatePrices();  
   const prices = getCurrentPrices();
 
   for (const user in users) {
