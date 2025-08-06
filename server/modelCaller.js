@@ -5,6 +5,15 @@ const path = require('path');
 
 const PROMPT_FILE = path.join(__dirname, 'prompts.json');
 
+// Simulated model response delay in milliseconds (e.g., 2–5 seconds)
+const MIN_DELAY_MS = 2000;
+const MAX_DELAY_MS = 5000;
+
+function simulateDelay(min = MIN_DELAY_MS, max = MAX_DELAY_MS) {
+    const duration = Math.floor(Math.random() * (max - min + 1)) + min;
+    return new Promise(resolve => setTimeout(resolve, duration));
+}
+
 // Load prompts once
 const prompts = JSON.parse(fs.readFileSync(PROMPT_FILE, 'utf8'));
 
@@ -26,22 +35,22 @@ async function fetchPredictedPrices(symbol, history) {
         : fallbackPrompt();
 
     try {
-        // const response = await axios.post('http://127.0.0.1:8000/predict', {
-        //     symbol,
-        //     history,
-        //     prompt
-        // });
+        const response = await axios.post('http://127.0.0.1:8000/predict', {
+            symbol,
+            history,
+            prompt
+        });
 
         return {
             prompt,
-            //   predicted: response.data.predicted_price
-            predicted: [
-                127.6,
-                116.2,
-                102.2,
-                84.4,
-                56.8
-            ]
+              predicted: response.data.predicted_price
+            // predicted: [
+            //     127.6,
+            //     116.2,
+            //     102.2,
+            //     84.4,
+            //     56.8
+            // ]
 
         };
     } catch (err) {
@@ -51,3 +60,27 @@ async function fetchPredictedPrices(symbol, history) {
 }
 
 module.exports = { fetchPredictedPrices };
+
+// Mock model prediction function with simulated delay
+// async function fetchPredictedPrices(symbol, history) {
+//     const prompt = getRandomPrompt();
+
+//     console.log(`[modelCaller] Simulating model delay for ${symbol}...`);
+
+//     await simulateDelay();
+
+//     console.log(`[modelCaller] Model response ready for ${symbol}`);
+
+//     return {
+//         prompt,
+//         predicted: [
+//             127.6,
+//             116.2,
+//             102.2,
+//             84.4,
+//             56.8
+//         ]
+//     };
+// }
+
+// module.exports = { fetchPredictedPrices };

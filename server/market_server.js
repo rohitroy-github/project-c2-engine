@@ -4,7 +4,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const axios = require("axios");
 
-const { updatePrices, getCurrentPrices, maybeTriggerModelCall } = require("./priceEngine");
+const { updatePrices, getCurrentPrices, startModelTrigger } = require("./priceEngine");
 const { users, createUser, trade, calculatePNL } = require("./users");
 const { getLeaderboard } = require("./leaderboard");
 const assets = require("./assets");
@@ -232,9 +232,10 @@ app.get("/assets", (req, res) => {
   res.send({ assets });
 });
 
+startModelTrigger();
 // Price update loop
 setInterval(async () => {
-  await maybeTriggerModelCall();  // Random model call
+  // await maybeTriggerModelCall();  // Random model call
   updatePrices();
   const prices = getCurrentPrices();
 
