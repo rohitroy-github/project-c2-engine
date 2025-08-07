@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import Navbar from "./layout/Navbar";
 import RegisterPage from "./pages/RegisterPage";
 import TradePage from "./pages/TradePage";
@@ -18,6 +19,14 @@ function App() {
     <Router>
       <AuthProvider>
         <Navbar />
+        <ToastContainer position="top-right"
+          autoClose={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          theme="light" />
         <Routes>
           <Route path="/" element={<Navigate to="/register" />} />
           <Route path="/register" element={<RegisterPage />} />

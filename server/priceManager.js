@@ -8,7 +8,7 @@ assets.forEach(asset => {
     price: asset.basePrice,
     history: [asset.basePrice],
     predictedPrices: [],
-    injectIndex: 0
+    injectIndex: 0,
   };
 });
 

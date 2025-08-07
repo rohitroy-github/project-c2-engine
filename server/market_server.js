@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 const axios = require("axios");
 
 const { updatePrices, getCurrentPrices, startModelTrigger } = require("./priceEngine");
+const { initializePromptEmitter } = require('./modelCaller');
 const { users, createUser, trade, calculatePNL } = require("./users");
 const { getLeaderboard } = require("./leaderboard");
 const assets = require("./assets");
@@ -12,6 +13,7 @@ const assets = require("./assets");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
+initializePromptEmitter(io);
 
 app.use(cors());
 app.use(express.json());

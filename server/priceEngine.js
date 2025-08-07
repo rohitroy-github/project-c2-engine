@@ -21,7 +21,7 @@ function updatePrices() {
 
     // Update price history
     state.history.push(state.price);
-    if (state.history.length > 10) state.history.shift();
+    if (state.history.length > 100) state.history.shift();
   });
 }
 

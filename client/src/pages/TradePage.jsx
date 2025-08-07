@@ -3,11 +3,16 @@ import TradePanel from "../components/TradePanel";
 import LivePriceChart from "../components/LivePriceChart";
 import { useAuthContext } from "../context/authContext";
 import axios from "axios";
+import { io } from "socket.io-client";
+import { toast } from 'react-toastify';
+
+const socket = io("http://localhost:3000");
 
 export default function TradePage() {
   const { userInfo } = useAuthContext();
   const [assetOptions, setAssetOptions] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState("");
+
 
   // Fetch assets from backend
   useEffect(() => {
@@ -29,6 +34,29 @@ export default function TradePage() {
     };
 
     fetchAssets();
+  }, []);
+
+
+  useEffect(() => {
+    const handlePromptUpdate = ({ symbol, prompt }) => {
+      console.log("Received prompt:", symbol, prompt);
+      toast.warn(`Market Sentiment ${symbol}: ${prompt}`, {
+        position: "top-right",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    };
+
+    socket.on('promptUpdate', handlePromptUpdate);
+
+    return () => {
+      socket.off('promptUpdate', handlePromptUpdate); // cleanup
+    };
   }, []);
 
   if (!userInfo) {

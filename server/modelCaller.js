@@ -6,12 +6,20 @@ const path = require('path');
 const PROMPT_FILE = path.join(__dirname, 'prompts.json');
 
 // Simulated model response delay in milliseconds (e.g., 2–5 seconds)
-const MIN_DELAY_MS = 2000;
-const MAX_DELAY_MS = 5000;
+// const MIN_DELAY_MS = 2000;
+// const MAX_DELAY_MS = 5000;
 
-function simulateDelay(min = MIN_DELAY_MS, max = MAX_DELAY_MS) {
-    const duration = Math.floor(Math.random() * (max - min + 1)) + min;
-    return new Promise(resolve => setTimeout(resolve, duration));
+// function simulateDelay(min = MIN_DELAY_MS, max = MAX_DELAY_MS) {
+//     const duration = Math.floor(Math.random() * (max - min + 1)) + min;
+//     return new Promise(resolve => setTimeout(resolve, duration));
+// }
+
+
+let io = null;
+const lastPromptBySymbol = {};
+
+function initializePromptEmitter(ioInstance) {
+    io = ioInstance;
 }
 
 // Load prompts once
@@ -29,11 +37,20 @@ function fallbackPrompt() {
     return prompts[index];
 }
 
+const presentPrompt = null;
+
 async function fetchPredictedPrices(symbol, history) {
     const prompt = (typeof crypto !== 'undefined' && crypto.getRandomValues)
         ? getRandomPrompt()
         : fallbackPrompt();
+    // presentPrompt = prompt;
 
+    if (prompt !== lastPromptBySymbol[symbol]) {
+        lastPromptBySymbol[symbol] = prompt;
+        if (io) {
+            io.emit('promptUpdate', { symbol, prompt });
+        }
+    }
     try {
         const response = await axios.post('http://127.0.0.1:8000/predict', {
             symbol,
@@ -43,14 +60,7 @@ async function fetchPredictedPrices(symbol, history) {
 
         return {
             prompt,
-              predicted: response.data.predicted_price
-            // predicted: [
-            //     127.6,
-            //     116.2,
-            //     102.2,
-            //     84.4,
-            //     56.8
-            // ]
+            predicted: response.data.predicted_price
 
         };
     } catch (err) {
@@ -59,7 +69,7 @@ async function fetchPredictedPrices(symbol, history) {
     }
 }
 
-module.exports = { fetchPredictedPrices };
+module.exports = { fetchPredictedPrices, initializePromptEmitter };
 
 // Mock model prediction function with simulated delay
 // async function fetchPredictedPrices(symbol, history) {
