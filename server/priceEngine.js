@@ -1,25 +1,38 @@
 // priceEngine.js
-const { getAllStates, getState, getCurrentPrices } = require('./priceManager');
-const { maybeTriggerModelCall } = require('./modelTrigger');
+const { getAllStates, getCurrentPrices } = require('./priceManager');
 
 function updatePrices() {
   const allStates = getAllStates();
 
   Object.entries(allStates).forEach(([symbol, state]) => {
-    if (state.predictedPrices.length > 0 && state.injectIndex < state.predictedPrices.length) {
-      // Inject model-predicted price
-      const next = state.predictedPrices[state.injectIndex];
+    let next;
+
+    if (
+      state.predictedPrices.length > 0 &&
+      state.injectIndex < state.predictedPrices.length
+    ) {
+      // ✅ Use predicted percentage change
+      const pctChange = state.predictedPrices[state.injectIndex] / 100;
+
+      // Apply change to last price
+      next = state.price * (1 + pctChange);
+
+      // Add small random noise so it's not fully predictable
+      const noise = (Math.random() * 0.004 - 0.002) * state.price; // ±0.2%
+      next += noise;
+
       state.injectIndex++;
-      state.price = parseFloat(next.toFixed(2));
     } else {
-      // Simulate normal price movement
-      const volatility = 0.03;
+      // ✅ Normal random walk when no model injection
+      const volatility = 0.02; // ~2% max random change
       const change = (Math.random() * 2 - 1) * volatility;
-      const next = Math.max(state.price * (1 + change), 1);
-      state.price = parseFloat(next.toFixed(2));
+      next = Math.max(state.price * (1 + change), 1);
     }
 
-    // Update price history
+    // Update price with safe rounding
+    state.price = parseFloat(next.toFixed(2));
+
+    // Keep history updated
     state.history.push(state.price);
     if (state.history.length > 100) state.history.shift();
   });
@@ -28,5 +41,5 @@ function updatePrices() {
 module.exports = {
   updatePrices,
   getCurrentPrices,
-  startModelTrigger: maybeTriggerModelCall
+  startModelTrigger: require('./modelTrigger').maybeTriggerModelCall
 };
