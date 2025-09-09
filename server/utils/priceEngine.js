@@ -41,5 +41,5 @@ function updatePrices() {
 module.exports = {
   updatePrices,
   getCurrentPrices,
-  startModelTrigger: require('./modelTrigger').maybeTriggerModelCall
+  startModelTrigger: require('../crons/modelTrigger').maybeTriggerModelCall
 };

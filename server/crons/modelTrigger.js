@@ -1,6 +1,6 @@
 // modelTrigger.js
 const { fetchPredictedPrices } = require('./modelCaller');
-const { getSymbols, getSymbolHistory, injectModelPrices } = require('./priceManager');
+const { getSymbols, getSymbolHistory, injectModelPrices } = require('../utils/priceManager');
 
 function getRandomDelay(minSeconds = 10, maxSeconds = 30) {
   return Math.floor(Math.random() * (maxSeconds - minSeconds + 1) + minSeconds) * 1000;

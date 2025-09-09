@@ -1,5 +1,5 @@
 // priceManager.js
-const assets = require('./assets');
+const assets = require('../assets');
 
 const priceState = {};
 

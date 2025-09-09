@@ -4,8 +4,8 @@ const http = require("http");
 const { Server } = require("socket.io");
 const axios = require("axios");
 
-const { updatePrices, getCurrentPrices, startModelTrigger } = require("./priceEngine");
-const { initializePromptEmitter } = require('./modelCaller');
+const { updatePrices, getCurrentPrices, startModelTrigger } = require("./utils/priceEngine");
+const { initializePromptEmitter } = require('./crons/modelCaller');
 const { users, createUser, trade, calculatePNL } = require("./users");
 const { getLeaderboard } = require("./leaderboard");
 const assets = require("./assets");
